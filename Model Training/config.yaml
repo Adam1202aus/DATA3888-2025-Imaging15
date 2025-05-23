@@ -1,0 +1,70 @@
+# Main Configuration (config.yaml)
+
+subprocess_timeout_seconds: 1000000
+
+paths:
+  base_data_dir: "data/interim"
+  base_feature_dir: "data/features_ml"
+  splits_dir: "data/splits"
+  base_output_dir: "outputs"
+
+
+cv:
+  k_folds: 5
+  seed: 42
+
+experiments:
+  colorspaces: ["original", "grayscale", "ycbcr", "cielab", "hed"]
+  model_types: ["resnet", "mobilenetv2", "efficientnetb0", "rf"]
+
+hyperparameters:
+  resnet:
+    epochs: 50
+    batch_size: 32
+    img_size: [224, 224]
+    base_trainable_setting: 10
+    dropout: 0.5
+    learning_rate: 0.0003
+    optimizer: "adam"
+    early_stopping_patience: 10
+    reduce_lr_patience: 5
+
+  mobilenetv2:
+    epochs: 50
+    batch_size: 32
+    img_size: [224, 224]
+    base_trainable_setting: 15
+    dropout: 0.3
+    learning_rate: 0.0003
+    optimizer: "adam"
+    early_stopping_patience: 10
+    reduce_lr_patience: 5
+
+  efficientnetb0:
+    epochs: 50
+    batch_size: 32
+    img_size: [224, 224]
+    base_trainable_setting: 20
+    dropout: 0.3
+    learning_rate: 0.0003
+    optimizer: "adam"
+    early_stopping_patience: 10
+    reduce_lr_patience: 5
+
+  rf:
+    n_estimators: 60
+    max_depth: null
+    random_state: 42
+    min_samples_split: 2
+    min_samples_leaf: 1
+    full_mode_sample_fraction: 0.2
+
+test_run:
+  enabled: false
+  sample_fraction: 0.05
+  subprocess_timeout_seconds_override: 3600
+
+  resnet_epochs_override: 2
+  mobilenetv2_epochs_override: 2
+  efficientnetb0_epochs_override: 2
+  rf_n_estimators_override: 10
