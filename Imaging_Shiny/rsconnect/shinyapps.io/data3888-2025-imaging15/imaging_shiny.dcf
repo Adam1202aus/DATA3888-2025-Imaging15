@@ -1,0 +1,10 @@
+name: imaging_shiny
+title:
+username: data3888-2025-imaging15
+account: data3888-2025-imaging15
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14803500
+bundleId: 10340585
+url: https://data3888-2025-imaging15.shinyapps.io/imaging_shiny/
+version: 1
