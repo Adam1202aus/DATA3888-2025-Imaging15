@@ -1,0 +1,152 @@
+---
+title: "Untitled"
+author: "Janet Ren"
+date: "2025-05-24"
+papersize: letter
+fontsize: 9pt
+skip_final_break: true
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide 
+---
+
+```{r,warning=FALSE, message=FALSE, echo=TRUE}
+library(tidyverse)
+library(webshot2)
+root_dir <- "./Data Models"
+models_name <- c("RandomForest", "ResNet", "MobileNet", "EfficientNet")
+models <- c("rf", "resnet", "mobilenetv2", "efficientnetb0")
+color_spaces <- c("original", "grayscale", "cielab", "ycbcr")
+
+results <- data.frame()
+
+for (model in models) {
+  for (space in color_spaces) {
+    accs <- c()
+    times <- c()
+    prec <- c()
+    for (fold in 1:5) {
+      base_path <- file.path(root_dir,model, paste0(space, "_", model), paste0("fold_", fold))
+      acc_path <- file.path(base_path, "report.txt")
+      time_path <- file.path(base_path, "training_time.txt")
+      
+      acc_raw <- readLines(acc_path, warn = FALSE)
+      acc_line <- acc_raw[grepl("^\\s*accuracy", acc_raw)]
+      acc_nums <- suppressWarnings(as.numeric(str_extract(acc_line, "[0-9\\.]+")))
+      acc_value <- acc_nums[1]
+      
+      prec_line <- acc_raw[grepl("weighted avg", acc_raw)]
+      prec_nums <- suppressWarnings(as.numeric(unlist(str_extract_all(prec_line, "[0-9\\.]+"))))
+      precision_value <- if (length(prec_nums) >= 1) prec_nums[1] else NA
+      
+      time_raw <- readLines(time_path, warn = FALSE)
+      time_value <- suppressWarnings(as.numeric(str_extract(time_raw, "^[0-9\\.]+")))
+      
+      accs <- c(accs, acc_value)
+      times <- c(times, time_value)
+      prec <- c(prec, precision_value)
+    }
+    
+    results <- rbind(results, data.frame(
+      Model = model,
+      ColorSpace = space,
+      Accuracy = mean(accs),
+      Precision = mean(prec),
+      TrainTime = mean(times)
+    ))
+  }
+}
+
+```
+
+```{r,warning=FALSE, message=FALSE, echo=TRUE}
+results <- results %>%
+  mutate(
+    Model = recode(Model,
+                   "efficientnetb0" = "EfficientNetB0",
+                   "mobilenetv2" = "MobileNetV2",
+                   "resnet" = "ResNet",
+                   "rf" = "Random Forest"),
+    
+    ColorSpace = recode(ColorSpace,
+                        "cielab" = "CIELAB",
+                        "grayscale" = "Grayscale",
+                        "original" = "RGB",
+                        "ycbcr" = "YCbCr")
+  )
+```
+
+```{r,warning=FALSE, message=FALSE, echo=TRUE}
+
+library(gt)
+library(dplyr)
+library(tidyr)
+
+wide_df <- results %>%
+  pivot_wider(
+    names_from = ColorSpace,
+    values_from = c(Accuracy, Precision, TrainTime)
+  )
+gt_table <- wide_df %>%
+  gt() %>%
+  tab_header(
+    title = md("**Performance Comparison**")
+  ) %>%
+  fmt_number(
+    columns = where(is.numeric), decimals = 4
+  ) %>%
+  fmt_number(
+    columns = c(
+      TrainTime_RGB,
+      TrainTime_Grayscale,
+      TrainTime_CIELAB,
+      TrainTime_YCbCr
+    ),decimals = 2
+  ) %>%
+  cols_label(
+    Accuracy_RGB = "Acc.",
+    Precision_RGB = "Prec.",
+    TrainTime_RGB = "Time",
+    
+    Accuracy_Grayscale = "Acc.",
+    Precision_Grayscale = "Prec.",
+    TrainTime_Grayscale = "Time",
+    
+    Accuracy_CIELAB = "Acc.",
+    Precision_CIELAB = "Prec.",
+    TrainTime_CIELAB = "Time",
+    
+    Accuracy_YCbCr = "Acc.",
+    Precision_YCbCr = "Prec.",
+    TrainTime_YCbCr = "Time"
+  )%>%
+  tab_spanner(label = "RGB", columns = c(Accuracy_RGB, Precision_RGB, TrainTime_RGB)) %>%
+  tab_spanner(label = "Grayscale", columns = c(Accuracy_Grayscale, Precision_Grayscale, TrainTime_Grayscale)) %>%
+  tab_spanner(label = "CIELAB", columns = c(Accuracy_CIELAB, Precision_CIELAB, TrainTime_CIELAB)) %>%
+  tab_spanner(label = "YCbCr", columns = c(Accuracy_YCbCr, Precision_YCbCr, TrainTime_YCbCr)) %>%
+  cols_align(align = "center", columns = everything())
+
+gt_table
+gtsave(gt_table, "Figures/final_performance_table.png") 
+```
+
+```{r,warning=FALSE, message=FALSE, echo=TRUE}
+library(readr)
+results_csv <- results %>%
+  mutate(
+    Model = recode(Model,
+                   "Random Forest" = "RF",
+                   "MobileNetV2" = "Mobilenet",
+                   "EfficientNetB0" = "Effcientnet"),
+    ColorSpace = recode(ColorSpace,
+                        "Grayscale" = "Gray scale")
+  ) %>%
+  rename(
+    Time = TrainTime 
+  )
+names(results_csv)[1:2] <- c("", "")
+results_csv
+write_csv(results_csv, "avg_model_performance.csv")
+```
