@@ -1,0 +1,21 @@
+cv:
+  current_fold_num_to_run: 5
+  k_folds_total: 5
+  seed: 42
+hyperparameters:
+  efficientnetb0:
+    base_trainable_setting: 20
+    batch_size: 32
+    dropout: 0.3
+    early_stopping_patience: 10
+    epochs: 30
+    img_size:
+    - 224
+    - 224
+    learning_rate: 0.0003
+    optimizer: adam
+    reduce_lr_patience: 5
+paths:
+  data_dir: /mnt/c/Users/cxc04/Desktop/Image Analysis 6.0/data/interim/ycbcr
+  output_root: /mnt/c/Users/cxc04/Desktop/Image Analysis 6.0/outputs/efficientnetb0/ycbcr_efficientnetb0_exp_250517_193434_fullrun
+  splits_dir: /mnt/c/Users/cxc04/Desktop/Image Analysis 6.0/data/splits

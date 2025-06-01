@@ -1,0 +1,10 @@
+                       precision    recall  f1-score   support
+
+               DCIS_1     0.2860    0.3259    0.3047       402
+               DCIS_2     0.2594    0.2626    0.2610       396
+       Invasive_Tumor     0.2283    0.2180    0.2231       399
+Prolif_Invasive_Tumor     0.2837    0.2531    0.2675       399
+
+             accuracy                         0.2650      1596
+            macro avg     0.2644    0.2649    0.2641      1596
+         weighted avg     0.2644    0.2650    0.2641      1596
