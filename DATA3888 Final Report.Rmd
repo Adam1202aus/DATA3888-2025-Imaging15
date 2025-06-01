@@ -1,36 +1,16 @@
 ---
-title: DATA3888 Imaging 15 Project Report
-
-
-# Abstract
-# abstract:
-
-# Paper size for the document, values of letter and a4
+title: "Impact of Colour Space Transformations on Tumour Cell Classification Model"
+author: "Image15: 530482866, 520016837, 540028959, 520466043, 530818157"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 papersize: letter
-
-# Font size of the document, values of 9pt (default), 10pt, 11pt and 12pt
 fontsize: 9pt
-
-
-# Optional: Skip inserting final break between acknowledgements, default is false
 skip_final_break: true
-
-
-# Produce a pdf
-output: html_document
-
-
-# placeholder for formatting, not working right now Vignette metadata for inclusion in a package.
-vignette: >
-  %\VignetteIndexEntry{YourPackage-vignetteentry}
-  %\VignetteKeywords{YourPackage, r, anotherkeyword}
-  %\VignettePackage{YourPackage}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options:
-  markdown:
-    wrap: 72
-header-includes:
-  - \usepackage{placeins}
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: hide 
 ---
 
 ```{r echo=FALSE, message=FALSE, warning = FALSE }
@@ -44,7 +24,7 @@ library(webshot2)
 
 ```
 
-## 1. Executive Summary
+# Executive Summary
 
 Accurate classification of tumour cells using hematoxylin and eosin (H&E) stained histopathology images play a crucial role in cancer diagnosis and treatment discussions. However, variability in colour representation can influence how classification models learn to distinguish subtle cellular features, which affects the performance of machine learning models. The aim of this study is to evaluate whether transforming from RGB encoded images to Grayscale, CIELAB, YCbCr colour spaces could meaningfully improve tumour cell classification performance across various machine learning frameworks. 
 
@@ -65,26 +45,26 @@ https://github.com/Adam1202aus/DATA3888-2025-Imaging15
 
 ![Figure 1. Workflow Diagram](./Figures/work_flow.png)
 
-## 2.Project Method - Part A
+# Project Method - Part A
 
-### Data collection
+## Data collection
 
 The H&E stained image data used in this report originates from a study by Janesick A, et al., where breast cancer tissue was examined and cell type was determined using gene expression information. These images were provided by the University of Sydney’s DATA3888 ‘Biotechnology data folder’, where they were grouped into 20 distinct cell types. This dataset can be generally categorised into three classes of cells: immune, tumour and structural cells.
 
 This study focuses on tumour cell classification, targeting four distinct types of tumour cells: DCIS 1 cells, DCIS 2 cells, invasive tumour cells and proliferative invasive tumour cells. By selecting this subset, the study aims to differentiate tumour cells across various stages of cancer development and progression.
 
 
-### Data transformation
+## Data transformation
 
 Certain cell images in the dataset were found to be corrupted (i.e. images with incorrect dimensions). These images were therefore removed.
 
 To address class imbalance in the dataset, image augmentation techniques were used to perform up-sampling and down-sampling. This ensures that all cell types contain an equal amount of 10,000 images. Up-sampling was done by applying transformation such as flipping and rotating existing images to generate additional data. This process was applied to the DCIS1, DCIS 2 and Proliferative Invasive cell type, which originally contained roughly 8,400,6,900 and 3,700 images respectively. The invasive tumour cell type, which contains about 34,000 images, was downsampled through random selection to reduce the number of images to 10,000.
 
-### Data splitting
+## Data splitting
 
 To evaluate model performance reliably the data was split into 80% training and 20% testing, as is standard, and 5-fold cross-validation was applied. This is done by partitioning the dataset into five equally sized subsets.The use of 5-fold cross-validation improves the robustness of the evaluation by reducing the impact of any one particular data split. It also helps minimise the risk of overfitting and provides a more generalisable estimate of model performance across unseen data. Final performance metrics are averaged over the five folds to produce a stable and reliable assessment.
 
-### Model development
+## Model development
 
 The core of this project involves developing and evaluating several machine learning models to classify cell images, with a focus on how different color space encodings affect performance. This project employs three distinct Convolutional Neural Network (CNN) architectures and one Random Forest (RF) model, each chosen for their strengths in image classification and feature based learning, respectively. 
 
@@ -120,14 +100,14 @@ EfficientNetB0: Part of the EfficientNet family of models that achieve high accu
 Random Forest: Unlike CNNs that learn features directly from pixel data, the RF model was trained on Histogram of Oriented Gradients (HOG) features. HOG features capture information about local object appearance and shape by describing the distribution of intensity gradients or edge directions. HOG parameters included resizing images to 128x128, using 8x8 pixels per cell, 2x2 cells per block, and 9 orientations. 
 
 
-### Evaluation strategy
+## Evaluation strategy
 
 The evaluation strategy was designed to provide a comprehensive assessment of model performance across the different architectures and color space transformations. This involved calculating and comparing several key metrics for each model configuration. 
 The primary metrics selected were: Accuracy, Precision, Recall and F1-score, Training Time.
 To ensure the reliability and generalizability of the findings, a 5-fold cross-validation methodology was employed. The final performance metrics reported for each configuration represent the average across these five folds, yielding a more stable and robust estimate of model performance. The core of the evaluation then involved comparing these averaged metrics across all tested models and color spaces.
 
 
-## 3. Project Method - Part B
+# Project Method - Part B
 
 The data provided has been H&E stained, a process which increases the visual contrast between components of the cell. This technique accounts for roughly 80% of stained slides globally. This process is regulated by bodies which give certification to labs; this helps to standardise the process and a recent study (Dunn et al. 2025) suggests that this practice is reliably controlled but there is notable variation in staining execution. 
 
@@ -140,7 +120,7 @@ Due to the rise of machine learning models in classifying cell images and variat
 The transferring of cell images also plays a role in the colour encoding as the colour space of an image impacts its spatial complexity. This means that the ability to transfer large volumes of cell images is influenced by the colour encoding. The normalisation and transferring of these cell images are what motivates this report to find how colour encodings perform across different ML models; and to determine the trade-off between different colour spaces and how this impacts the implementation of normalisation techniques and the spatial complexity of the data.
 
 
-## 4. Project Results - Part A
+# Project Results - Part A
 
 To start analyzing the result, the code below will extract the analysis file "report.txt" and "training_time.txt" in each model's fold folder. Then it will take the average of each fold to get accuracy, precision, time metric
 
@@ -300,7 +280,7 @@ In conclusion, all colour spaces performed similarly within each model, with the
 
 
 
-## 5. Project Results - Part B
+# Project Results - Part B
 
 ![Figure 3. R Shiny application screenshot](./Figures/r_shiny.png)
 
@@ -316,7 +296,7 @@ In the “Models” tab, users can compare training results of various machine l
 The final “Predict” tab enables users to upload their own cell images, choose a trained model and colour space, and view the transformed image before classification. Upon clicking “Classify,” the model predicts the cell type, and the result is displayed and stored in a history table, allowing users to evaluate performance across different combinations. Due to size constraints of online deployment, the trained model’s fold with the highest accuracy was selected to be deployed alongside Shiny’s app.
 
 
-## 6. Discussion
+# Discussion
 
 From a biotechnological standpoint, the key limitation lies in the homogeneity of the image dataset. All H&E stained images used in this study were acquired through a single, standardised imaging pipeline. By relying on one staining protocol, scanner type, and set of acquisition conditions, the dataset lacks the variability typically encountered in practice. Consequently, the model’s performance may not generalise well to histopathology slides produced under different staining protocol, scanner type, or laboratory environments. Additionally, the focus on only four tumour subtypes (DCIS 1, DCIS 2, invasive, and proliferative invasive) constrains the diagnostic scope. Many clinically relevant phenotypes were excluded, limiting the system’s applicability to broader histopathological practice. This homogeneity underscores the need for future validation on a more diverse datasets to ensure robust applicability in real world application.
 
@@ -326,14 +306,14 @@ From a computational data science standpoint, the trade off between model perfor
 To enhance the biological relevance and generalisability of the model, future efforts can focus on expanding the dataset to include images from multiple laboratories, varied staining protocols, and different scanner types. Additionally, incorporating a wider range of tumour subtypes can broaden the model’s diagnostic scope and better reflect the heterogeneity seen in real life clinical practice. Finally, future work can explore feature level fusion of multiple colour spaces, allowing classifiers to leverage complementary visual cues without repeatedly retraining on full size images, thereby reducing overall computation. 
 
 
-## 7. Conclusion
+# Conclusion
 
 This study systematically assessed four classification architectures (Random Forest, ResNet, MobileNetV2, EfficientNetB0) across four colour space transformations (RGB, Grayscale, CIELAB, and YCbCr), using a balanced dataset of 40,000 H&E-stained tumour cell images and 5-fold cross-validation. While CIELAB and YcBcr colour space transformation slightly improved accuracy and precision, they incurred substantial training time penalties. These findings underscore that, although alternative colour spaces can offer incremental performance benefits, their practical adoption requires careful consideration of computational cost. When marginal performance gains are critical, CIELAB or YCbCr transformations may be justified, especially when used in conjunction with effective image compression strategies under a whole slide imaging settings.
 
 To extend this study, future effort should address both biotechnological data enrichment and computational optimisation to further enhance model robustness, interpretability, and clinical applicability, so that this framework can evolve into a scalable solution for histopathology based tumour cell classification.
 
 
-## Student Contribution
+# Student Contribution
 
 530482866: Executive Summary, Project Method Part A, Discussion & Conclusion section of the report. Presentation content and formatting.
 
@@ -346,7 +326,7 @@ To extend this study, future effort should address both biotechnological data en
 530818157: Data augmentation, Development, training and evaluation of the models, Model Development/Evaluation Strategy section of the report
 
 
-## References
+# References
 
 Dunn, C, Brettle, D, Hodgson, C, Hughes, R & Treanor, D 2025, ‘An international study of stain variability in histopathology using qualitative and quantitative analysis’, Journal of Pathology Informatics, p. 100423.
 Gowda, SN & Yuan, C 2019, ‘ColorNet: Investigating the Importance of Color Spaces for Image Classification’, Computer Vision – ACCV 2018, pp. 581–596.
