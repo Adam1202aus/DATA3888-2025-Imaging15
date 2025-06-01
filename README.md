@@ -38,7 +38,7 @@ Data pre-processing, feature extraction, and data splitting scripts are primaril
 
 ## 2. Model training
 
-Model training is orchestrated by `run_all_folds.py`, which iterates through cross-validation folds, colorspaces, and model types defined in `config.yaml`. It calls specific training scripts for different model architectures.
+Model training is orchestrated by `run_all_folds.py`, which iterates through cross-validation folds, colorspaces, and model types defined in `config.yaml`. It calls specific training scripts for different model architectures. Due to the large file size of models, the "Data Models" folder only include the analysis file, the actual trained model files (.keras) have been uploaded to this google drive: https://drive.google.com/drive/folders/1SWV4fgqqE_NHKe8cSk0VtAYqoQBZgcak
 
 ### a. Main Orchestration Script
 
