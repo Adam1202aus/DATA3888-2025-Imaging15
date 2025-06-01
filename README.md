@@ -126,11 +126,13 @@ Model training is orchestrated by `run_all_folds.py`, which iterates through cro
 
 The final report's R code will extract the analysis data generated during model training, specifically in the "report.txt" and "training_time.txt" file, located inside "DATA Models/*model_type*/*colourspace*/fold *" folder to create a table showing the average performance metrics (accuracy, precision, time) across all folds. The code will also create a "avg_model_performance.csv" file that can be used to generate the side-by-side plot in R Shiny application by putting the csv file inside "Imaging_Shiny/training_data"
 
-## 4. R Shiny deployment (This was done through Window Subsystem for Linux 2)
+## 4. R Shiny deployment (This was done through Window Subsystem for Linux 2 Ubuntu)
 
 ### Required packages
 
 The whole R Shiny app is located inside "Imaging_Shiny", using R version 4.4.1
+
+The deployment process was tested through Window Subsystem for Linux 2 Ubuntu, the installation for Window version using RStudio should remain the same albeit without having to install extra packages in Bash terminal
 
 Before launching R, go inside the app folder:
 
@@ -155,12 +157,15 @@ Required packages are listed inside "Imaging_Shiny/global.R"
 
 Some further step needed for some library:
 
-Install tensorflow through keras3
+Install tensorflow through keras3, need python environment
 
-* `keras3::install_keras(backend = "tensorflow")`
+* In Bash terminal: `sudo apt-get install python3-venv python3-pip python3-dev`
+* In R terminal: `keras3::install_keras(backend = "tensorflow")`
 
 Install EBImage through Biocmanager
 
+* In Bash terminal: `sudo apt-get install fftw3 fftw3-dev pkg-config`
+* In R terminal:
 * `install.packages("BiocManager")`
 * `BiocManager::install("EBImage")`
 
