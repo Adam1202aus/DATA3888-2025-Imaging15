@@ -126,13 +126,58 @@ Model training is orchestrated by `run_all_folds.py`, which iterates through cro
 
 The final report's R code will extract the analysis data generated during model training, specifically in the "report.txt" and "training_time.txt" file, located inside "DATA Models/*model_type*/*colourspace*/fold *" folder to create a table showing the average performance metrics (accuracy, precision, time) across all folds. The code will also create a "avg_model_performance.csv" file that can be used to generate the side-by-side plot in R Shiny application by putting the csv file inside "Imaging_Shiny/training_data"
 
-## 4. R Shiny deployment
+## 4. R Shiny deployment (This was done through Window Subsystem for Linux 2)
 
 ### Required packages
 
-The whole R Shiny app is located inside "Imaging_Shiny"
+The whole R Shiny app is located inside "Imaging_Shiny", using R version 4.4.1
+
+Before launching R, go inside the app folder:
+
+* `cd Imaging_Shiny` to go inside the app folder
+* `R` to launch R
+
 Required packages are listed inside "Imaging_Shiny/global.R"
+
+### Required R Packages:
+
+* `shiny`
+* `bslib`
+* `shinydashboard`
+* `shinydashboardPlus`
+* `DT`
+* `ggplot2`
+* `tidyr` 
+* `dplyr`
+* `reticulate` - further step needed
+* `keras3` - further step needed
+* `EBImage` - special installation
+
+Some further step needed for some library:
+
+Install tensorflow through keras3
+
+* `keras3::install_keras(backend = "tensorflow")`
+
+Install EBImage through Biocmanager
+
+* `install.packages("BiocManager")`
+* `BiocManager::install("EBImage")`
+
+Install required python package for reticulate
+
+* `py_install("scikit-image")`
+* `py_install("numpy==1.26.4")`
+
+### Local deployment
+
+* `library(shiny)`
+* `runApp()`
 
 ### Online deployment
 
 The application can be deployed to R Shiny through shinyapps.io by using the "rsconnect" package, and following the guide on this shinyapps.io site: https://docs.posit.co/shinyapps.io/guide/getting_started/
+
+Basically, after connecting your account with rsconnect, run `deployApp()` to deploy it online, the py_require() code in server.r already instruct the online environment to install python environment.
+
+Due to the online nature of python environment, first time rebooting the instance of the app will take 3-5 minutes to install everything, and first time clicking "Classify" on "Predict" tab will take 2-3 minutes to call the prediction.py file
