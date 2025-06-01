@@ -1,0 +1,38 @@
+---
+title: "barplot_figure"
+output: html_document
+date: "2025-06-01"
+---
+
+```{r}
+library(ggplot2)
+# Define your data
+categories <- c("DCIS_1", "DCIS_2", "Prolif_Inv", "Invasiv")
+dcis_1_count <- length(list.files("Image_Data/50/DCIS_1/DCIS_1"))
+dcis_2_count <- length(list.files("Image_Data/50/DCIS_2/DCIS_2"))
+prolif_count <- length(list.files("Image_Data/50/Invasive_Tumor/Invasive_Tumor"))
+invasiv_count <- length(list.files("Image_Data/50/Prolif_Invasive_Tumor/Prolif_Invasive_Tumor"))
+values <- c(dcis_1_count, dcis_2_count, prolif_count, invasiv_count)
+
+# Create a data frame
+df <- data.frame(Category = categories, Value = values)
+
+# Load ggplot2 for advanced plotting
+
+
+# Create the bar plot
+ggplot(df, aes(x = Category, y = Value, fill = Category)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Figure 2. Number of Images per Cell Type",
+    x = "Cell Type",
+    y = "Number of Images"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+```
+
