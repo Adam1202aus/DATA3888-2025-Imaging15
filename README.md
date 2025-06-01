@@ -4,6 +4,8 @@
 
 Data pre-processing, feature extraction, and data splitting scripts are primarily located within the `src` directory, with specific paths mentioned below. The main configuration for paths and parameters is controlled by `config.yaml` in the root directory.
 
+We intend to put the source image in Image_Data folder as following "Image_Data/50/*cell type*/*cell type*/*the .png cell image*"
+
 ### a. Initial Dataset Preparation and Augmentation
 
 * **Script:** `extract_random_images.py`
@@ -122,9 +124,11 @@ Model training is orchestrated by `run_all_folds.py`, which iterates through cro
 * `Pillow` 
 * `tqdm`
 
-## 3. Final Report's table
+## 3. Final Report's table and figures
 
 The final report's R code (It's also separated to "graph.Rmd" file) will extract the analysis data generated during model training, specifically in the "report.txt" and "training_time.txt" file, located inside "DATA Models/*model_type*/*colourspace*/fold *" folder to create a table showing the average performance metrics (accuracy, precision, time) across all folds. The code will also create a "avg_model_performance.csv" file that can be used to generate the side-by-side plot in R Shiny application by putting the csv file inside "Imaging_Shiny/training_data"
+
+The code that count the cell files to output the barplot were also separated into "barplot_figure.Rmd" for convenient
 
 ## 4. R Shiny deployment (This was done through Window Subsystem for Linux 2 Ubuntu)
 
