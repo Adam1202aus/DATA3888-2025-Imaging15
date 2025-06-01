@@ -59,40 +59,6 @@ This study focuses on tumour cell classification, targeting four distinct types 
 
 Certain cell images in the dataset were found to be corrupted (i.e. images with incorrect dimensions). These images were therefore removed
 
-The 4 cell types that were chosen got a class imbalance problem, as shown in the figure here generated from the code here:
-
-```{r}
-library(ggplot2)
-# Define your data
-categories <- c("DCIS_1", "DCIS_2", "Prolif_Inv", "Invasiv")
-dcis_1_count <- length(list.files("Image_Data/50/DCIS_1/DCIS_1"))
-dcis_2_count <- length(list.files("Image_Data/50/DCIS_2/DCIS_2"))
-prolif_count <- length(list.files("Image_Data/50/Invasive_Tumor/Invasive_Tumor"))
-invasiv_count <- length(list.files("Image_Data/50/Prolif_Invasive_Tumor/Prolif_Invasive_Tumor"))
-values <- c(dcis_1_count, dcis_2_count, prolif_count, invasiv_count)
-
-# Create a data frame
-df <- data.frame(Category = categories, Value = values)
-
-# Load ggplot2 for advanced plotting
-
-
-# Create the bar plot
-ggplot(df, aes(x = Category, y = Value, fill = Category)) +
-  geom_bar(stat = "identity", width = 0.7) +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Figure 2. Number of Images per Cell Type",
-    x = "Cell Type",
-    y = "Number of Images"
-  ) +
-  theme_minimal(base_size = 14) +
-  theme(
-    legend.position = "none",
-    plot.title = element_text(hjust = 0.5, face = "bold")
-  )
-```
-
 To address class imbalance in the dataset, image augmentation techniques were used to perform up-sampling and down-sampling. This ensures that all cell types contain an equal amount of 10,000 images. Up-sampling was done by applying transformation such as flipping and rotating existing images to generate additional data. This process was applied to the DCIS1, DCIS 2 and Proliferative Invasive cell type, which originally contained roughly 8,400,6,900 and 3,700 images respectively. The invasive tumour cell type, which contains about 34,000 images, was downsampled through random selection to reduce the number of images to 10,000.
 
 ## Data splitting
@@ -296,7 +262,7 @@ names(results_csv)[1:2] <- c("", "")
 write_csv(results_csv, "avg_model_performance.csv")
 ```
 
-![Figure 3. Performance Statistics](./Figures/final_performance_table.png)
+![Figure 2. Performance Statistics](./Figures/final_performance_table.png)
 
 \
 
@@ -317,7 +283,7 @@ In conclusion, all colour spaces performed similarly within each model, with the
 
 # Project Results - Part B
 
-![Figure 4. R Shiny application screenshot](./Figures/r_shiny.png)
+![Figure 3. R Shiny application screenshot](./Figures/r_shiny.png)
 
 \
 
